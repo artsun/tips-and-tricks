@@ -3,6 +3,8 @@ def iptonum(ip=''):
   accepts string of dotted ip (exmpl: 192.168.1.2)
   returns int
   """
+  if ip == '':
+    return None
   ip = ip.split('.')
   num = list()
   [num.append(str(bin(int(i)))[2:]) for i in ip]
