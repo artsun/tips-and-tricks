@@ -12,3 +12,4 @@ def iptonum(ip=''):
   [num_new.append((lambda x_ = x: '0'*(8-len(x_))+x_)(x))  for x in num]
   return int(''.join(num_new), 2)
 
+
