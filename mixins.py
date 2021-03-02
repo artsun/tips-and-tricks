@@ -42,3 +42,15 @@ class BurstMixin(object):
         if request.method.lower() == 'post' and response.status_code in self.burst_codes:
             self.increment_counters(request)
         return response
+
+
+class PaginatorMixin(object):
+    objs: Paginator
+    pages_left: list
+    pages_right: list
+
+    def paginate(self, obj_collection, pages, page):
+        paginator = Paginator(obj_collection, pages)
+        self.objs = paginator.get_page(page)
+        self.pages_left = list(reversed(list(paginator)[int(page)-1::-1][:5]))
+        self.pages_right = list(paginator)[int(page)::1][:5]
