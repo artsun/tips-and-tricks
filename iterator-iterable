@@ -1,0 +1,19 @@
+from typing import Iterator, Iterable
+
+
+class CyclicIterator:
+
+    def __init__(self, iterable: Iterable):
+        self.iterable: Iterable = iterable
+        self.iterator: Iterator = iterable.__iter__()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        try:
+            each = next(self.iterator)
+        except StopIteration:
+            self.iterator = self.iterable.__iter__()
+            each = next(self.iterator)
+        return each
