@@ -17,3 +17,66 @@ class CyclicIterator:
             self.iterator = self.iterable.__iter__()
             each = next(self.iterator)
         return each
+        
+
+# 0 1 1 2 3 5 8 13 ...
+# ^ ^
+
+def fib():
+    prev, cur = 0, 1
+    while True:
+        yield prev
+        prev, cur = cur, cur + prev
+
+
+orig_it = iter([1,2,3])
+it = Peekable(orig_it)
+it.peek() # 1
+next(it) # 1
+it.peek() # 2
+it.peek() # 2
+next(it) # 2
+next(it) # 3
+it.peek() # StopIteration
+next(it) # StopIteration
+
+# [1]
+it.peek() # 1
+it.peek() # 1
+next(it) # 1
+next(it) # StopIteration
+
+# []
+
+
+from typing import Iterator
+
+
+class Peekable:
+
+    def __init__(iterator: Iterator):
+        self.iterator: Iterator = iterator
+        try:
+            self._fut = next(self.iterator)
+        except StopIteration:
+            self._fut = None
+    
+    def __next__(self):
+        temp = self._fut
+        try:
+            self._fut = next(self.iterator)
+        except StopIteration:
+            self._fut = None
+        if temp is None:
+            raise StopIteration
+        return temp
+
+    def peek(self):
+        if self._fut is None:
+            raise StopIteration
+        return self._fut
+    
+    
+
+            
+
